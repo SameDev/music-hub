@@ -6,17 +6,25 @@ Self-hosted personal media library manager for homelabs — organize, tag, and d
 
 ## Status
 
-🚧 Early development — currently a project skeleton. See [`docs/design/`](./docs/design/) for design documents and the staged development roadmap.
+Functional v1. All backend modules and their frontend pages are built and have been verified against a real running stack (Postgres, Redis, BullMQ, yt-dlp, ffmpeg) — see [`docs/design/`](./docs/design/) for the design process behind the skeleton step.
 
-- ✅ Monorepo skeleton
-- 🚧 Auth module
-- 🚧 Library module
-- 🚧 Downloads module
-- 🚧 Queue system
-- 🚧 Metadata management
-- 🚧 Playlists
-- 🚧 Settings
-- 🚧 Dashboard
+- ✅ Auth (JWT access/refresh, Argon2, rate-limited login, RBAC)
+- ✅ Users (self-service profile/password, admin user management)
+- ✅ Library (search/filter/favorites/history, streaming playback, cover art)
+- ✅ Downloads (yt-dlp, playlist expansion, live progress via WebSocket)
+- ✅ Queue (BullMQ, concurrency enforced live from Settings)
+- ✅ Metadata (tag read/write via ffmpeg)
+- ✅ Playlists (CRUD, ordering, add-from-library)
+- ✅ Settings (persisted config, library/temp path changes take effect live)
+- ✅ Integrations (outbound webhooks on download events)
+- ✅ Dashboard (live stats)
+- 🧪 Backend test suite: unit + e2e (`cd backend && npm test` / `npm run test:e2e`)
+- ⚠️ Docker/nginx: statically audited and fixed, but never actually run end-to-end in
+  the environment this project was built in (no working Docker daemon available there).
+  `docker compose config` validates cleanly; report an issue if `docker compose up`
+  doesn't work for you.
+- ⚠️ Settings' `theme` field persists but doesn't change the running UI yet (app is
+  dark-themed only, matching the original design brief) — `language` does switch live.
 
 ## Stack
 

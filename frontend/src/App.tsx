@@ -3,6 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './lib/queryClient';
 import { AuthProvider } from './contexts/AuthContext';
 import { PlayerProvider } from './contexts/PlayerContext';
+import { ToastProvider } from './contexts/ToastContext';
 import { RequireAuth } from './components/RequireAuth';
 import { AppLayout } from './components/layout/AppLayout';
 import { LoginPage } from './routes/Login';
@@ -20,6 +21,7 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
+          <ToastProvider>
           <PlayerProvider>
             <Routes>
               <Route path="/login" element={<LoginPage />} />
@@ -37,6 +39,7 @@ export function App() {
               </Route>
             </Routes>
           </PlayerProvider>
+          </ToastProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>

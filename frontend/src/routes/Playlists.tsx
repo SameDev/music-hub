@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ListMusic, Plus } from 'lucide-react';
 import { apiFetch } from '../lib/api';
+import { useToast } from '../contexts/ToastContext';
 
 interface Playlist {
   id: string;
@@ -15,6 +16,7 @@ interface Playlist {
 export function PlaylistsPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [name, setName] = useState('');
 
   const playlistsQuery = useQuery({
@@ -27,7 +29,9 @@ export function PlaylistsPage() {
     onSuccess: () => {
       setName('');
       void queryClient.invalidateQueries({ queryKey: ['playlists'] });
+      toast.success(t('toast.playlistCreated'));
     },
+    onError: () => toast.error(t('toast.playlistCreateError')),
   });
 
   function handleSubmit(event: FormEvent) {

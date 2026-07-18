@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Trash2, Webhook as WebhookIcon } from 'lucide-react';
 import { apiFetch } from '../lib/api';
+import { useToast } from '../contexts/ToastContext';
 
 const WEBHOOK_EVENTS = ['download.completed', 'download.failed'] as const;
 
@@ -16,6 +17,7 @@ interface Webhook {
 export function IntegrationsPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [url, setUrl] = useState('');
   const [events, setEvents] = useState<string[]>([...WEBHOOK_EVENTS]);
   const [formError, setFormError] = useState<string | null>(null);
@@ -34,6 +36,7 @@ export function IntegrationsPage() {
       setUrl('');
       setFormError(null);
       invalidate();
+      toast.success(t('toast.webhookCreated'));
     },
     onError: (error: Error) => setFormError(error.message),
   });
@@ -42,11 +45,16 @@ export function IntegrationsPage() {
     mutationFn: ({ id, enabled }: { id: string; enabled: boolean }) =>
       apiFetch<Webhook>(`/integrations/webhooks/${id}`, { method: 'PATCH', body: JSON.stringify({ enabled }) }),
     onSuccess: invalidate,
+    onError: () => toast.error(t('toast.webhookUpdateError')),
   });
 
   const remove = useMutation({
     mutationFn: (id: string) => apiFetch<void>(`/integrations/webhooks/${id}`, { method: 'DELETE' }),
-    onSuccess: invalidate,
+    onSuccess: () => {
+      invalidate();
+      toast.success(t('toast.webhookDeleted'));
+    },
+    onError: () => toast.error(t('toast.webhookDeleteError')),
   });
 
   function toggleEvent(event: string) {

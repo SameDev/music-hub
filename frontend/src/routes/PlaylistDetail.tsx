@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
 import { apiFetch } from '../lib/api';
+import { useToast } from '../contexts/ToastContext';
 
 interface PlaylistTrack {
   trackId: string;
@@ -27,6 +28,7 @@ export function PlaylistDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [name, setName] = useState<string | null>(null);
 
   const playlistQuery = useQuery({
@@ -43,25 +45,33 @@ export function PlaylistDetailPage() {
     mutationFn: (newName: string) =>
       apiFetch(`/playlists/${id}`, { method: 'PATCH', body: JSON.stringify({ name: newName }) }),
     onSuccess: invalidate,
+    onError: () => toast.error(t('toast.playlistRenameError')),
   });
 
   const removeTrack = useMutation({
     mutationFn: (trackId: string) => apiFetch<void>(`/playlists/${id}/tracks/${trackId}`, { method: 'DELETE' }),
-    onSuccess: invalidate,
+    onSuccess: () => {
+      invalidate();
+      toast.success(t('toast.trackRemoved'));
+    },
+    onError: () => toast.error(t('toast.trackRemoveError')),
   });
 
   const reorder = useMutation({
     mutationFn: (trackIds: string[]) =>
       apiFetch<void>(`/playlists/${id}/reorder`, { method: 'PATCH', body: JSON.stringify({ trackIds }) }),
     onSuccess: invalidate,
+    onError: () => toast.error(t('toast.reorderError')),
   });
 
   const remove = useMutation({
     mutationFn: () => apiFetch<void>(`/playlists/${id}`, { method: 'DELETE' }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['playlists'] });
+      toast.success(t('toast.playlistDeleted'));
       navigate('/playlists');
     },
+    onError: () => toast.error(t('toast.playlistDeleteError')),
   });
 
   function move(index: number, direction: -1 | 1) {

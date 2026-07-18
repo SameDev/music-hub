@@ -106,5 +106,24 @@
     "saving": "Saving...",
     "saved": "Saved!",
     "error": "Could not save"
+  },
+  "toast": {
+    "addedToPlaylist": "Added to playlist",
+    "favoriteError": "Could not update favorite",
+    "addToPlaylistError": "Could not add to playlist",
+    "playlistCreated": "Playlist created",
+    "playlistCreateError": "Could not create playlist",
+    "playlistRenamed": "Playlist renamed",
+    "playlistRenameError": "Could not rename playlist",
+    "playlistDeleted": "Playlist deleted",
+    "playlistDeleteError": "Could not delete playlist",
+    "trackRemoved": "Track removed from playlist",
+    "trackRemoveError": "Could not remove track",
+    "reorderError": "Could not reorder playlist",
+    "webhookCreated": "Webhook added",
+    "webhookCreateError": "Could not add webhook",
+    "webhookUpdateError": "Could not update webhook",
+    "webhookDeleted": "Webhook removed",
+    "webhookDeleteError": "Could not remove webhook"
   }
 }

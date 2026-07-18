@@ -8,6 +8,7 @@ import { useDebounce } from '../lib/useDebounce';
 import { formatDuration } from '../lib/formatDuration';
 import { getCoverUrl } from '../lib/mediaUrl';
 import { usePlayer } from '../contexts/PlayerContext';
+import { useToast } from '../contexts/ToastContext';
 
 interface Track {
   id: string;
@@ -43,6 +44,7 @@ export function LibraryPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { currentTrack, isPlaying, play, togglePlay } = usePlayer();
+  const toast = useToast();
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(() => searchParams.get('search') ?? '');
   const [genre, setGenre] = useState('');
@@ -94,6 +96,7 @@ export function LibraryPage() {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['library-favorites'] });
     },
+    onError: () => toast.error(t('toast.favoriteError')),
   });
 
   const playlistsQuery = useQuery({
@@ -106,7 +109,9 @@ export function LibraryPage() {
       apiFetch<void>(`/playlists/${playlistId}/tracks`, { method: 'POST', body: JSON.stringify({ trackId }) }),
     onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: ['playlist', variables.playlistId] });
+      toast.success(t('toast.addedToPlaylist'));
     },
+    onError: () => toast.error(t('toast.addToPlaylistError')),
   });
 
   const totalPages = tracksQuery.data ? Math.ceil(tracksQuery.data.total / PAGE_SIZE) : 1;

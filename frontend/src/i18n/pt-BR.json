@@ -106,5 +106,24 @@
     "saving": "Salvando...",
     "saved": "Salvo!",
     "error": "Não foi possível salvar"
+  },
+  "toast": {
+    "addedToPlaylist": "Adicionado à playlist",
+    "favoriteError": "Não foi possível atualizar o favorito",
+    "addToPlaylistError": "Não foi possível adicionar à playlist",
+    "playlistCreated": "Playlist criada",
+    "playlistCreateError": "Não foi possível criar a playlist",
+    "playlistRenamed": "Playlist renomeada",
+    "playlistRenameError": "Não foi possível renomear a playlist",
+    "playlistDeleted": "Playlist excluída",
+    "playlistDeleteError": "Não foi possível excluir a playlist",
+    "trackRemoved": "Música removida da playlist",
+    "trackRemoveError": "Não foi possível remover a música",
+    "reorderError": "Não foi possível reordenar a playlist",
+    "webhookCreated": "Webhook adicionado",
+    "webhookCreateError": "Não foi possível adicionar o webhook",
+    "webhookUpdateError": "Não foi possível atualizar o webhook",
+    "webhookDeleted": "Webhook removido",
+    "webhookDeleteError": "Não foi possível remover o webhook"
   }
 }

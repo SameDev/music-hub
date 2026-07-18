@@ -63,5 +63,21 @@
     "statusORGANIZING": "Organizing",
     "statusCOMPLETED": "Completed",
     "statusFAILED": "Failed"
+  },
+  "settings": {
+    "note": "Changing the library or temp path only affects new downloads, it does not move existing files.",
+    "libraryPath": "Library directory",
+    "downloadTmpPath": "Temp directory",
+    "allowedFormats": "Allowed formats (comma-separated)",
+    "defaultQuality": "Default quality",
+    "maxConcurrentDownloads": "Concurrent downloads",
+    "language": "Language",
+    "theme": "Theme",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "save": "Save",
+    "saving": "Saving...",
+    "saved": "Saved!",
+    "error": "Could not save"
   }
 }

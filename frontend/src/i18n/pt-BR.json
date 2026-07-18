@@ -63,5 +63,21 @@
     "statusORGANIZING": "Organizando",
     "statusCOMPLETED": "Concluído",
     "statusFAILED": "Erro"
+  },
+  "settings": {
+    "note": "Alterar o caminho da biblioteca ou da pasta temporária afeta apenas novos downloads, não move arquivos existentes.",
+    "libraryPath": "Diretório da biblioteca",
+    "downloadTmpPath": "Diretório temporário",
+    "allowedFormats": "Formatos permitidos (separados por vírgula)",
+    "defaultQuality": "Qualidade padrão",
+    "maxConcurrentDownloads": "Downloads simultâneos",
+    "language": "Idioma",
+    "theme": "Tema",
+    "themeDark": "Escuro",
+    "themeLight": "Claro",
+    "save": "Salvar",
+    "saving": "Salvando...",
+    "saved": "Salvo!",
+    "error": "Não foi possível salvar"
   }
 }

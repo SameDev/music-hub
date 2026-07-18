@@ -13,7 +13,9 @@
   },
   "common": {
     "comingSoon": "Coming soon",
-    "logout": "Log out"
+    "logout": "Log out",
+    "menu": "Open menu",
+    "close": "Close"
   },
   "auth": {
     "loginSubtitle": "Sign in to manage your library",

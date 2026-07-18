@@ -13,7 +13,9 @@
   },
   "common": {
     "comingSoon": "Em breve",
-    "logout": "Sair"
+    "logout": "Sair",
+    "menu": "Abrir menu",
+    "close": "Fechar"
   },
   "auth": {
     "loginSubtitle": "Entre para gerenciar sua biblioteca",

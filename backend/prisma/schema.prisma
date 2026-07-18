@@ -21,5 +21,77 @@ model User {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
+  favorites Favorite[]
+  history   PlayHistory[]
+
   @@map("users")
+}
+
+model Artist {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  albums Album[]
+
+  @@map("artists")
+}
+
+model Album {
+  id        String   @id @default(uuid())
+  title     String
+  year      Int?
+  coverPath String?
+  artistId  String
+  createdAt DateTime @default(now())
+
+  artist Artist  @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  tracks Track[]
+
+  @@unique([artistId, title])
+  @@map("albums")
+}
+
+model Track {
+  id              String   @id @default(uuid())
+  title           String
+  trackNumber     Int?
+  durationSeconds Int?
+  genre           String?
+  filePath        String   @unique
+  albumId         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  album     Album         @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  favorites Favorite[]
+  history   PlayHistory[]
+
+  @@map("tracks")
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  trackId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackId])
+  @@map("favorites")
+}
+
+model PlayHistory {
+  id       String   @id @default(uuid())
+  userId   String
+  trackId  String
+  playedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@index([userId, playedAt])
+  @@map("play_history")
 }

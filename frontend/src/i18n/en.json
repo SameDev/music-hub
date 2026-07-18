@@ -15,7 +15,9 @@
     "comingSoon": "Coming soon",
     "logout": "Log out",
     "menu": "Open menu",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "auth": {
     "loginSubtitle": "Sign in to manage your library",

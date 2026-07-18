@@ -15,7 +15,9 @@
     "comingSoon": "Em breve",
     "logout": "Sair",
     "menu": "Abrir menu",
-    "close": "Fechar"
+    "close": "Fechar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar"
   },
   "auth": {
     "loginSubtitle": "Entre para gerenciar sua biblioteca",

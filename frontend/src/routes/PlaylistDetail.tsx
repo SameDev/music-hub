@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowDown, ArrowUp, Trash2 } from 'lucide-react';
 import { apiFetch } from '../lib/api';
 import { useToast } from '../contexts/ToastContext';
+import { ConfirmDialog } from '../components/ui/ConfirmDialog';
+import { RowSkeletonList } from '../components/ui/Skeleton';
 
 interface PlaylistTrack {
   trackId: string;
@@ -30,6 +32,7 @@ export function PlaylistDetailPage() {
   const queryClient = useQueryClient();
   const toast = useToast();
   const [name, setName] = useState<string | null>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   const playlistQuery = useQuery({
     queryKey: ['playlist', id],
@@ -84,7 +87,7 @@ export function PlaylistDetailPage() {
   }
 
   if (playlistQuery.isLoading) {
-    return <p className="text-sm text-slate-400">{t('dashboard.loading')}</p>;
+    return <RowSkeletonList rows={6} columns={3} />;
   }
   if (!playlistQuery.data) {
     return <p className="text-sm text-red-400">{t('dashboard.error')}</p>;
@@ -103,13 +106,23 @@ export function PlaylistDetailPage() {
         />
         <button
           type="button"
-          onClick={() => confirm(t('playlists.confirmDelete')) && remove.mutate()}
+          onClick={() => setConfirmingDelete(true)}
           className="flex items-center gap-1 text-sm text-slate-400 hover:text-red-400"
         >
           <Trash2 size={16} />
           {t('playlists.delete')}
         </button>
       </div>
+
+      <ConfirmDialog
+        open={confirmingDelete}
+        message={t('playlists.confirmDelete')}
+        onConfirm={() => {
+          setConfirmingDelete(false);
+          remove.mutate();
+        }}
+        onCancel={() => setConfirmingDelete(false)}
+      />
 
       <div className="overflow-x-auto rounded-lg border border-surface-border">
         <table className="w-full min-w-[560px] text-left text-sm">

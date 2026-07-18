@@ -9,6 +9,7 @@ import { formatDuration } from '../lib/formatDuration';
 import { getCoverUrl } from '../lib/mediaUrl';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useToast } from '../contexts/ToastContext';
+import { RowSkeletonList } from '../components/ui/Skeleton';
 
 interface Track {
   id: string;
@@ -168,7 +169,7 @@ export function LibraryPage() {
         </select>
       </div>
 
-      {tracksQuery.isLoading && <p className="text-sm text-slate-400">{t('dashboard.loading')}</p>}
+      {tracksQuery.isLoading && <RowSkeletonList rows={8} columns={4} />}
       {tracksQuery.isError && <p className="text-sm text-red-400">{t('dashboard.error')}</p>}
 
       {tracksQuery.data && (

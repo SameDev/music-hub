@@ -9,3 +9,7 @@
 body {
   @apply antialiased;
 }
+
+:focus-visible {
+  @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-surface;
+}

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { ListMusic, Plus } from 'lucide-react';
 import { apiFetch } from '../lib/api';
 import { useToast } from '../contexts/ToastContext';
+import { CardSkeletonGrid } from '../components/ui/Skeleton';
 
 interface Playlist {
   id: string;
@@ -60,7 +61,7 @@ export function PlaylistsPage() {
         </button>
       </form>
 
-      {playlistsQuery.isLoading && <p className="text-sm text-slate-400">{t('dashboard.loading')}</p>}
+      {playlistsQuery.isLoading && <CardSkeletonGrid count={8} />}
 
       {playlistsQuery.data && playlistsQuery.data.length === 0 && (
         <p className="text-sm text-slate-500">{t('playlists.empty')}</p>

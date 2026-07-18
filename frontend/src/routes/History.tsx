@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { apiFetch } from '../lib/api';
+import { RowSkeletonList } from '../components/ui/Skeleton';
 
 interface HistoryEntry {
   id: string;
@@ -24,7 +25,7 @@ export function HistoryPage() {
     <div>
       <h1 className="mb-4 text-xl font-semibold">{t('nav.history')}</h1>
 
-      {historyQuery.isLoading && <p className="text-sm text-slate-400">{t('dashboard.loading')}</p>}
+      {historyQuery.isLoading && <RowSkeletonList rows={8} columns={4} />}
 
       {historyQuery.data && historyQuery.data.length === 0 && (
         <p className="text-sm text-slate-500">{t('history.empty')}</p>

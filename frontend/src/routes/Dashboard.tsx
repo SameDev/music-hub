@@ -4,6 +4,7 @@ import { Album, Cpu, Disc3, Download, HardDrive, ListMusic, MemoryStick, Music }
 import { apiFetch } from '../lib/api';
 import { formatBytes } from '../lib/formatBytes';
 import { StatCard } from '../components/ui/StatCard';
+import { CardSkeletonGrid } from '../components/ui/Skeleton';
 
 interface DashboardStats {
   library: { trackCount: number; artistCount: number; albumCount: number };
@@ -28,7 +29,7 @@ export function DashboardPage() {
     <div>
       <h1 className="mb-6 text-xl font-semibold">{t('nav.dashboard')}</h1>
 
-      {isLoading && <p className="text-sm text-slate-400">{t('dashboard.loading')}</p>}
+      {isLoading && <CardSkeletonGrid count={8} />}
       {isError && <p className="text-sm text-red-400">{t('dashboard.error')}</p>}
 
       {data && (

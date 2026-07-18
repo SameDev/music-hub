@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { DOWNLOADS_QUEUE } from '../queue/queue.constants';
 import { DownloadJobData } from '../queue/interfaces/download-job-data.interface';
 import { YtDlpService } from '../queue/lib/ytdlp.service';
+import { SettingsService } from '../settings/settings.service';
 import { DownloadsRepository } from './downloads.repository';
 import { CreateDownloadDto } from './dto/create-download.dto';
 
@@ -14,10 +15,18 @@ export class DownloadsService {
   constructor(
     private readonly downloadsRepository: DownloadsRepository,
     private readonly ytDlpService: YtDlpService,
+    private readonly settingsService: SettingsService,
     @InjectQueue(DOWNLOADS_QUEUE) private readonly downloadsQueue: Queue<DownloadJobData>,
   ) {}
 
   async submit(userId: string, dto: CreateDownloadDto): Promise<DownloadJob[]> {
+    const allowedFormats = await this.settingsService.getAllowedFormats();
+    if (!allowedFormats.includes(dto.format)) {
+      throw new BadRequestException(
+        `Format "${dto.format}" is not allowed. Allowed formats: ${allowedFormats.join(', ')}`,
+      );
+    }
+
     let entryLists: Awaited<ReturnType<YtDlpService['probeEntries']>>[];
     try {
       entryLists = await Promise.all(dto.urls.map((url) => this.ytDlpService.probeEntries(url)));

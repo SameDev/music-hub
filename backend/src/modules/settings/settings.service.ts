@@ -55,6 +55,10 @@ export class SettingsService implements OnApplicationBootstrap {
     return (await this.get()).downloadTmpPath;
   }
 
+  async getAllowedFormats(): Promise<string[]> {
+    return (await this.get()).allowedFormats;
+  }
+
   private async forceBootstrap(): Promise<AppSettings> {
     await this.onApplicationBootstrap();
     return this.cache!;

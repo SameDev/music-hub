@@ -5,6 +5,7 @@ import { DownloadStatus, DownloadJob } from '@prisma/client';
 import { DownloadsService } from './downloads.service';
 import { DownloadsRepository } from './downloads.repository';
 import { YtDlpService } from '../queue/lib/ytdlp.service';
+import { SettingsService } from '../settings/settings.service';
 import { DOWNLOADS_QUEUE } from '../queue/queue.constants';
 
 function makeJob(overrides: Partial<DownloadJob> = {}): DownloadJob {
@@ -35,17 +36,20 @@ describe('DownloadsService', () => {
   let repo: { createMany: jest.Mock; findById: jest.Mock; cancel: jest.Mock; findByUser: jest.Mock; getCounts: jest.Mock };
   let ytDlp: { probeEntries: jest.Mock };
   let queue: { add: jest.Mock; getJob: jest.Mock };
+  let settingsService: { getAllowedFormats: jest.Mock };
 
   beforeEach(async () => {
     repo = { createMany: jest.fn(), findById: jest.fn(), cancel: jest.fn(), findByUser: jest.fn(), getCounts: jest.fn() };
     ytDlp = { probeEntries: jest.fn() };
     queue = { add: jest.fn(), getJob: jest.fn() };
+    settingsService = { getAllowedFormats: jest.fn().mockResolvedValue(['mp3', 'flac', 'opus', 'm4a', 'wav']) };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DownloadsService,
         { provide: DownloadsRepository, useValue: repo },
         { provide: YtDlpService, useValue: ytDlp },
+        { provide: SettingsService, useValue: settingsService },
         { provide: getQueueToken(DOWNLOADS_QUEUE), useValue: queue },
       ],
     }).compile();
@@ -119,6 +123,15 @@ describe('DownloadsService', () => {
       await expect(
         service.submit('user-1', { urls: ['http://empty'], format: 'mp3' as never, quality: '192K' as never }),
       ).rejects.toThrow(BadRequestException);
+    });
+
+    it('rejects a format the admin has disallowed via Settings, before ever probing the URL', async () => {
+      settingsService.getAllowedFormats.mockResolvedValue(['mp3']);
+
+      await expect(
+        service.submit('user-1', { urls: ['http://example.com/a.wav'], format: 'wav' as never, quality: '192K' as never }),
+      ).rejects.toThrow(BadRequestException);
+      expect(ytDlp.probeEntries).not.toHaveBeenCalled();
     });
   });
 

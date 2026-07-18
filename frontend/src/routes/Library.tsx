@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { Heart, ListPlus, Pause, Play, Search } from 'lucide-react';
 import { apiFetch } from '../lib/api';
 import { useDebounce } from '../lib/useDebounce';
@@ -42,11 +43,20 @@ export function LibraryPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { currentTrack, isPlaying, play, togglePlay } = usePlayer();
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(() => searchParams.get('search') ?? '');
   const [genre, setGenre] = useState('');
   const [artistId, setArtistId] = useState('');
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(search);
+
+  useEffect(() => {
+    const fromUrl = searchParams.get('search');
+    if (fromUrl !== null) {
+      setSearch(fromUrl);
+      setPage(1);
+    }
+  }, [searchParams]);
 
   const tracksQuery = useQuery({
     queryKey: ['library-tracks', debouncedSearch, genre, artistId, page],

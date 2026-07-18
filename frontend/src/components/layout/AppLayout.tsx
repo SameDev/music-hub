@@ -2,8 +2,11 @@ import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { PlayerBar } from './Player';
+import { useSyncLanguage } from '../../lib/useSyncLanguage';
 
 export function AppLayout() {
+  useSyncLanguage();
+
   return (
     <div className="flex h-screen bg-surface text-slate-100">
       <Sidebar />

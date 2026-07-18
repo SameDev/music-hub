@@ -1,21 +1,37 @@
+import { useState, type FormEvent } from 'react';
 import { LogOut, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 export function Topbar() {
   const { t } = useTranslation();
   const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    if (search.trim()) {
+      navigate(`/library?search=${encodeURIComponent(search.trim())}`);
+    }
+  }
 
   return (
     <header className="flex h-14 items-center gap-3 border-b border-surface-border px-5">
-      <div className="flex w-full max-w-md items-center gap-2 rounded-md border border-surface-border bg-surface px-3 py-1.5 text-sm text-slate-400">
+      <form
+        onSubmit={handleSubmit}
+        className="flex w-full max-w-md items-center gap-2 rounded-md border border-surface-border bg-surface px-3 py-1.5 text-sm text-slate-400"
+      >
         <Search size={16} />
         <input
           type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           placeholder={t('search.placeholder')}
           className="w-full bg-transparent outline-none placeholder:text-slate-500"
         />
-      </div>
+      </form>
       <button
         type="button"
         onClick={() => void logout()}

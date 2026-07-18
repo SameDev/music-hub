@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { Heart, ListPlus, Search } from 'lucide-react';
+import { Heart, ListPlus, Pause, Play, Search } from 'lucide-react';
 import { apiFetch } from '../lib/api';
 import { useDebounce } from '../lib/useDebounce';
 import { formatDuration } from '../lib/formatDuration';
+import { getCoverUrl } from '../lib/mediaUrl';
+import { usePlayer } from '../contexts/PlayerContext';
 
 interface Track {
   id: string;
@@ -12,7 +14,7 @@ interface Track {
   trackNumber: number | null;
   durationSeconds: number | null;
   genre: string | null;
-  album: { title: string; artist: { name: string } };
+  album: { title: string; coverPath: string | null; artist: { name: string } };
 }
 
 interface TracksResponse {
@@ -39,6 +41,7 @@ const PAGE_SIZE = 20;
 export function LibraryPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const { currentTrack, isPlaying, play, togglePlay } = usePlayer();
   const [search, setSearch] = useState('');
   const [genre, setGenre] = useState('');
   const [artistId, setArtistId] = useState('');
@@ -159,6 +162,7 @@ export function LibraryPage() {
             <table className="w-full text-left text-sm">
               <thead className="border-b border-surface-border text-slate-400">
                 <tr>
+                  <th className="w-10"></th>
                   <th className="px-4 py-2 font-normal">{t('library.title')}</th>
                   <th className="px-4 py-2 font-normal">{t('library.artist')}</th>
                   <th className="px-4 py-2 font-normal">{t('library.album')}</th>
@@ -169,9 +173,39 @@ export function LibraryPage() {
               <tbody>
                 {tracksQuery.data.items.map((track) => {
                   const isFavorite = favoriteTrackIds.has(track.id);
+                  const isCurrent = currentTrack?.id === track.id;
+                  const coverUrl = getCoverUrl(track.album.coverPath);
                   return (
                     <tr key={track.id} className="border-b border-surface-border last:border-0 hover:bg-white/5">
-                      <td className="px-4 py-2 text-slate-100">{track.title}</td>
+                      <td className="pl-4">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            isCurrent
+                              ? togglePlay()
+                              : play({
+                                  id: track.id,
+                                  title: track.title,
+                                  artistName: track.album.artist.name,
+                                  albumTitle: track.album.title,
+                                  coverPath: track.album.coverPath,
+                                })
+                          }
+                          className="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 hover:bg-white/10 hover:text-accent-hover"
+                        >
+                          {isCurrent && isPlaying ? <Pause size={14} /> : <Play size={14} />}
+                        </button>
+                      </td>
+                      <td className="px-4 py-2 text-slate-100">
+                        <div className="flex items-center gap-3">
+                          {coverUrl ? (
+                            <img src={coverUrl} alt="" className="h-8 w-8 rounded object-cover" />
+                          ) : (
+                            <div className="h-8 w-8 rounded bg-surface" />
+                          )}
+                          <span className={isCurrent ? 'text-accent-hover' : ''}>{track.title}</span>
+                        </div>
+                      </td>
                       <td className="px-4 py-2 text-slate-400">{track.album.artist.name}</td>
                       <td className="px-4 py-2 text-slate-400">{track.album.title}</td>
                       <td className="px-4 py-2 text-slate-400">{formatDuration(track.durationSeconds)}</td>
@@ -215,7 +249,7 @@ export function LibraryPage() {
                 })}
                 {tracksQuery.data.items.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="px-4 py-6 text-center text-slate-500">
+                    <td colSpan={6} className="px-4 py-6 text-center text-slate-500">
                       {t('library.empty')}
                     </td>
                   </tr>

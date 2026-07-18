@@ -7,11 +7,12 @@ import { AuthService } from './auth.service';
 import { AuthRepository } from './auth.repository';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { JwtQueryStrategy } from './strategies/jwt-query.strategy';
 
 @Module({
   imports: [PassportModule, JwtModule.register({}), UsersModule],
   controllers: [AuthController],
-  providers: [AuthService, AuthRepository, JwtStrategy, JwtRefreshStrategy],
+  providers: [AuthService, AuthRepository, JwtStrategy, JwtRefreshStrategy, JwtQueryStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

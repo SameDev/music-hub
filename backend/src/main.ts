@@ -10,7 +10,10 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
 
-  app.use(helmet());
+  // Default CORP (same-origin) blocks <audio>/<img> tags on the frontend origin from loading
+  // the media-streaming endpoints — frontend and backend are deliberately different origins
+  // (see cors-origin.util.ts). Access is already gated by the query-token auth on those routes.
+  app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
   app.enableCors({ origin: buildCorsOriginValidator(config.get<string>('CORS_ORIGIN') ?? '') });
   app.useGlobalPipes(
     new ValidationPipe({

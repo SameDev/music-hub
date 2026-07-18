@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { PlayerBar } from './Player';
+import { FullscreenPlayer } from './FullscreenPlayer';
 import { useSyncLanguage } from '../../lib/useSyncLanguage';
 
 export function AppLayout() {
@@ -19,6 +20,7 @@ export function AppLayout() {
         </main>
         <PlayerBar />
       </div>
+      <FullscreenPlayer />
     </div>
   );
 }

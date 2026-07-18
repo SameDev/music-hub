@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { apiFetch } from '../lib/api';
 import { getStreamUrl } from '../lib/mediaUrl';
 
@@ -15,9 +15,14 @@ interface PlayerContextValue {
   isPlaying: boolean;
   currentTime: number;
   duration: number;
+  volume: number;
+  isFullscreen: boolean;
   play: (track: PlayableTrack) => void;
   togglePlay: () => void;
   seek: (time: number) => void;
+  setVolume: (volume: number) => void;
+  openFullscreen: () => void;
+  closeFullscreen: () => void;
 }
 
 const PlayerContext = createContext<PlayerContextValue | null>(null);
@@ -28,6 +33,13 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [volume, setVolumeState] = useState(1);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) audio.volume = volume;
+  }, [volume]);
 
   const play = useCallback((track: PlayableTrack) => {
     const audio = audioRef.current;
@@ -67,9 +79,29 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     setCurrentTime(time);
   }, []);
 
+  const setVolume = useCallback((next: number) => {
+    setVolumeState(Math.min(1, Math.max(0, next)));
+  }, []);
+
+  const openFullscreen = useCallback(() => setIsFullscreen(true), []);
+  const closeFullscreen = useCallback(() => setIsFullscreen(false), []);
+
   const value = useMemo(
-    () => ({ currentTrack, isPlaying, currentTime, duration, play, togglePlay, seek }),
-    [currentTrack, isPlaying, currentTime, duration, play, togglePlay, seek],
+    () => ({
+      currentTrack,
+      isPlaying,
+      currentTime,
+      duration,
+      volume,
+      isFullscreen,
+      play,
+      togglePlay,
+      seek,
+      setVolume,
+      openFullscreen,
+      closeFullscreen,
+    }),
+    [currentTrack, isPlaying, currentTime, duration, volume, isFullscreen, play, togglePlay, seek, setVolume, openFullscreen, closeFullscreen],
   );
 
   return (

@@ -9,6 +9,7 @@ import { DashboardPage } from './routes/Dashboard';
 import { LibraryPage } from './routes/Library';
 import { PlaylistsPage } from './routes/Playlists';
 import { PlaylistDetailPage } from './routes/PlaylistDetail';
+import { HistoryPage } from './routes/History';
 import { DownloadsPage } from './routes/Downloads';
 import { IntegrationsPage } from './routes/Integrations';
 import { SettingsPage } from './routes/Settings';
@@ -26,6 +27,7 @@ export function App() {
                 <Route path="library" element={<LibraryPage />} />
                 <Route path="playlists" element={<PlaylistsPage />} />
                 <Route path="playlists/:id" element={<PlaylistDetailPage />} />
+                <Route path="history" element={<HistoryPage />} />
                 <Route path="downloads" element={<DownloadsPage />} />
                 <Route path="integrations" element={<IntegrationsPage />} />
                 <Route path="settings" element={<SettingsPage />} />

@@ -54,6 +54,10 @@
     "delete": "Delete playlist",
     "confirmDelete": "Delete this playlist?"
   },
+  "history": {
+    "empty": "No listening history yet",
+    "playedAt": "Played at"
+  },
   "downloads": {
     "urls": "URLs (one per line)",
     "urlsPlaceholder": "https://example.com/audio.mp3",

@@ -54,6 +54,10 @@
     "delete": "Excluir playlist",
     "confirmDelete": "Excluir esta playlist?"
   },
+  "history": {
+    "empty": "Nenhum histórico de reprodução ainda",
+    "playedAt": "Reproduzido em"
+  },
   "downloads": {
     "urls": "URLs (uma por linha)",
     "urlsPlaceholder": "https://exemplo.com/audio.mp3",

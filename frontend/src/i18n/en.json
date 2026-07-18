@@ -76,6 +76,13 @@
     "statusCOMPLETED": "Completed",
     "statusFAILED": "Failed"
   },
+  "integrations": {
+    "description": "Send an HTTP notification to a URL of yours when a download completes or fails.",
+    "url": "Webhook URL",
+    "add": "Add webhook",
+    "empty": "No webhooks yet",
+    "enabled": "Enabled"
+  },
   "settings": {
     "note": "Changing the library or temp path only affects new downloads, it does not move existing files.",
     "libraryPath": "Library directory",

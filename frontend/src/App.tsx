@@ -10,6 +10,7 @@ import { LibraryPage } from './routes/Library';
 import { PlaylistsPage } from './routes/Playlists';
 import { PlaylistDetailPage } from './routes/PlaylistDetail';
 import { DownloadsPage } from './routes/Downloads';
+import { IntegrationsPage } from './routes/Integrations';
 import { SettingsPage } from './routes/Settings';
 
 export function App() {
@@ -26,6 +27,7 @@ export function App() {
                 <Route path="playlists" element={<PlaylistsPage />} />
                 <Route path="playlists/:id" element={<PlaylistDetailPage />} />
                 <Route path="downloads" element={<DownloadsPage />} />
+                <Route path="integrations" element={<IntegrationsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
               </Route>
             </Route>

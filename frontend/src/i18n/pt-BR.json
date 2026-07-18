@@ -76,6 +76,13 @@
     "statusCOMPLETED": "Concluído",
     "statusFAILED": "Erro"
   },
+  "integrations": {
+    "description": "Envie uma notificação HTTP para uma URL sua quando um download for concluído ou falhar.",
+    "url": "URL do webhook",
+    "add": "Adicionar webhook",
+    "empty": "Nenhum webhook cadastrado",
+    "enabled": "Ativo"
+  },
   "settings": {
     "note": "Alterar o caminho da biblioteca ou da pasta temporária afeta apenas novos downloads, não move arquivos existentes.",
     "libraryPath": "Diretório da biblioteca",

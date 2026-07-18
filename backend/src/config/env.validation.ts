@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { IsIn, IsNumber, IsString, validateSync } from 'class-validator';
+import { IsEmail, IsIn, IsNumber, IsString, MinLength, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
   @IsIn(['development', 'production', 'test'])
@@ -19,6 +19,22 @@ class EnvironmentVariables {
 
   @IsString()
   JWT_SECRET!: string;
+
+  @IsString()
+  JWT_ACCESS_EXPIRES_IN!: string;
+
+  @IsString()
+  JWT_REFRESH_SECRET!: string;
+
+  @IsString()
+  JWT_REFRESH_EXPIRES_IN!: string;
+
+  @IsEmail()
+  ADMIN_EMAIL!: string;
+
+  @IsString()
+  @MinLength(8)
+  ADMIN_PASSWORD!: string;
 
   @IsString()
   CORS_ORIGIN!: string;

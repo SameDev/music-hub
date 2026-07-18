@@ -13,9 +13,6 @@ build/
 *.log
 npm-debug.log*
 
-# Prisma
-backend/prisma/migrations/dev.db
-
 # IDE
 .vscode/
 .idea/

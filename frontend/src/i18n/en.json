@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "library": "Library",
+    "downloads": "Downloads",
+    "settings": "Settings"
+  },
+  "search": {
+    "placeholder": "Search songs, artists, albums..."
+  },
+  "common": {
+    "comingSoon": "Coming soon"
+  }
+}

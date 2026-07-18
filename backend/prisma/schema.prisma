@@ -1,0 +1,11 @@
+// MusicHub database schema.
+// Skeleton stage: no models yet — first models land with the Auth module step.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

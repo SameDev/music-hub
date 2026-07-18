@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "dashboard": "Painel",
+    "library": "Biblioteca",
+    "downloads": "Downloads",
+    "settings": "Configurações"
+  },
+  "search": {
+    "placeholder": "Buscar músicas, artistas, álbuns..."
+  },
+  "common": {
+    "comingSoon": "Em breve"
+  }
+}

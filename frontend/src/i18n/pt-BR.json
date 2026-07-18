@@ -9,6 +9,15 @@
     "placeholder": "Buscar músicas, artistas, álbuns..."
   },
   "common": {
-    "comingSoon": "Em breve"
+    "comingSoon": "Em breve",
+    "logout": "Sair"
+  },
+  "auth": {
+    "loginSubtitle": "Entre para gerenciar sua biblioteca",
+    "email": "E-mail",
+    "password": "Senha",
+    "login": "Entrar",
+    "loggingIn": "Entrando...",
+    "loginError": "E-mail ou senha inválidos"
   }
 }

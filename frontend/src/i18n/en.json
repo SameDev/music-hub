@@ -9,6 +9,15 @@
     "placeholder": "Search songs, artists, albums..."
   },
   "common": {
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "logout": "Log out"
+  },
+  "auth": {
+    "loginSubtitle": "Sign in to manage your library",
+    "email": "Email",
+    "password": "Password",
+    "login": "Log in",
+    "loggingIn": "Logging in...",
+    "loginError": "Invalid email or password"
   }
 }

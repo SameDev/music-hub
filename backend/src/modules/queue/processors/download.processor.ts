@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { DownloadStatus } from '@prisma/client';
@@ -18,9 +18,12 @@ import { DOWNLOADS_QUEUE } from '../queue.constants';
 const UNKNOWN_ARTIST = 'Unknown Artist';
 const UNKNOWN_ALBUM = 'Unknown Album';
 
+const CONCURRENCY_POLL_INTERVAL_MS = 15_000;
+
 @Processor(DOWNLOADS_QUEUE)
-export class DownloadProcessor extends WorkerHost {
+export class DownloadProcessor extends WorkerHost implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(DownloadProcessor.name);
+  private concurrencyPoll?: NodeJS.Timeout;
 
   constructor(
     private readonly queueRepository: QueueRepository,
@@ -32,6 +35,23 @@ export class DownloadProcessor extends WorkerHost {
     private readonly integrationsService: IntegrationsService,
   ) {
     super();
+  }
+
+  async onModuleInit(): Promise<void> {
+    await this.syncConcurrency();
+    this.concurrencyPoll = setInterval(() => void this.syncConcurrency(), CONCURRENCY_POLL_INTERVAL_MS);
+  }
+
+  onModuleDestroy(): void {
+    clearInterval(this.concurrencyPoll);
+  }
+
+  private async syncConcurrency(): Promise<void> {
+    const { maxConcurrentDownloads } = await this.settingsService.get();
+    if (this.worker.concurrency !== maxConcurrentDownloads) {
+      this.logger.log(`Applying maxConcurrentDownloads=${maxConcurrentDownloads}`);
+      this.worker.concurrency = maxConcurrentDownloads;
+    }
   }
 
   async process(job: Job<DownloadJobData>): Promise<void> {

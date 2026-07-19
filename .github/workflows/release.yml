@@ -68,19 +68,20 @@ jobs:
           body: |
             ## Run MusicHub with prebuilt images
 
-            No clone, no build. Download `docker-compose.release.yml` and `.env.example`
+            No clone, no build, no `.env` required. Download `docker-compose.release.yml`
             from this release's assets, then:
 
             ```bash
-            mv docker-compose.release.yml docker-compose.yml
-            cp .env.example .env
-            # edit .env — set real secrets, at minimum JWT_SECRET/JWT_REFRESH_SECRET/
-            # POSTGRES_PASSWORD/ADMIN_PASSWORD
-            docker compose up -d
+            docker compose -f docker-compose.release.yml up -d
             ```
 
             App available at `http://localhost` (or your Tailscale/LAN address — see
-            the README's CORS_ORIGIN note).
+            the README's CORS_ORIGIN note). Runs on default credentials out of the box,
+            fine for a trusted home network (e.g. ZimaOS/NAS one-click deploys).
+
+            Want your own secrets? Download `.env.example`, save it as `.env` next to
+            the compose file, and edit only the values you want to override — anything
+            you don't set falls back to the built-in default automatically.
 
             Images published to `ghcr.io/${{ github.repository_owner }}/music-hub-{backend,frontend,nginx}`,
             built for `linux/amd64` and `linux/arm64`.

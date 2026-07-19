@@ -67,7 +67,7 @@ services:
       dockerfile: nginx.Dockerfile
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "${MUSICHUB_PORT:-80}:80"
     depends_on:
       - frontend
       - backend

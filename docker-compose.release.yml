@@ -1,3 +1,8 @@
+# Prebuilt-image variant of docker-compose.yml — no clone, no build required.
+# Download this file + .env.example from the GitHub Releases page, then:
+#   cp .env.example .env  &&  edit .env  &&  docker compose -f docker-compose.release.yml up -d
+#
+# Set MUSICHUB_VERSION to pin a release (e.g. v0.1.0); defaults to latest.
 services:
   postgres:
     image: postgres:16-alpine
@@ -26,7 +31,7 @@ services:
       retries: 5
 
   backend:
-    build: ./backend
+    image: ghcr.io/samedev/music-hub-backend:${MUSICHUB_VERSION:-latest}
     restart: unless-stopped
     depends_on:
       postgres:
@@ -40,15 +45,13 @@ services:
       - backend_logs:/app/logs
 
   frontend:
-    build: ./frontend
+    image: ghcr.io/samedev/music-hub-frontend:${MUSICHUB_VERSION:-latest}
     restart: unless-stopped
     depends_on:
       - backend
 
   nginx:
-    build:
-      context: ./docker
-      dockerfile: nginx.Dockerfile
+    image: ghcr.io/samedev/music-hub-nginx:${MUSICHUB_VERSION:-latest}
     restart: unless-stopped
     ports:
       - "80:80"

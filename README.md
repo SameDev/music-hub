@@ -48,9 +48,24 @@ Functional v1. All backend modules and their frontend pages are built and have b
 | Frontend | React, Vite, TailwindCSS, TanStack Query, React Router, i18next, vite-plugin-pwa |
 | Infra | Docker, Docker Compose, FFmpeg, yt-dlp, Nginx |
 
-## Quickstart (Docker)
+## Quickstart (prebuilt images, no clone needed)
+
+Grab `docker-compose.release.yml` and `.env.example` from the [Releases](https://github.com/SameDev/music-hub/releases) page:
 
 ```bash
+mv docker-compose.release.yml docker-compose.yml
+cp .env.example .env
+# edit .env — at minimum set real JWT_SECRET/JWT_REFRESH_SECRET/POSTGRES_PASSWORD/ADMIN_PASSWORD
+docker compose up -d
+```
+
+App available at `http://localhost`. Images are published to `ghcr.io/samedev/music-hub-{backend,frontend,nginx}` for `linux/amd64` and `linux/arm64` on every tagged release — pin a version with `MUSICHUB_VERSION=v0.1.0` in `.env`, or leave unset to track `latest`.
+
+## Quickstart (build from source)
+
+```bash
+git clone https://github.com/SameDev/music-hub.git
+cd music-hub
 cp .env.example .env
 # edit .env with your own secrets
 docker compose up

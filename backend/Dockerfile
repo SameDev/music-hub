@@ -13,6 +13,7 @@ RUN npm run build
 FROM node:20-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
+ENV CHECKPOINT_DISABLE=1
 RUN apk add --no-cache ffmpeg python3 py3-pip
 RUN pip install --no-cache-dir --break-system-packages yt-dlp
 RUN addgroup -S musichub && adduser -S musichub -G musichub
@@ -21,6 +22,8 @@ RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
 USER musichub
 EXPOSE 3000
-CMD ["node", "dist/main.js"]
+ENTRYPOINT ["./docker-entrypoint.sh"]

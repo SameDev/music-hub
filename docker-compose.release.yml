@@ -1,20 +1,24 @@
 # Prebuilt-image variant of docker-compose.yml — no clone, no build required.
-# Download this file + .env.example from the GitHub Releases page, then:
-#   cp .env.example .env  &&  edit .env  &&  docker compose -f docker-compose.release.yml up -d
 #
-# Set MUSICHUB_VERSION to pin a release (e.g. v0.1.0); defaults to latest.
+# Works out of the box with zero configuration:
+#   docker compose -f docker-compose.release.yml up -d
+#
+# All variables below have safe-for-local defaults baked in via ${VAR:-default},
+# so an .env file is entirely optional. Create one only if you want to override
+# a value (e.g. real secrets for anything beyond a trusted home network) — see
+# .env.example for the full list.
 services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:-musichub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-musichub}
+      POSTGRES_DB: ${POSTGRES_DB:-musichub}
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-musichub}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -38,7 +42,21 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    env_file: .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://musichub:musichub@postgres:5432/musichub}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      PORT: ${PORT:-3000}
+      NODE_ENV: ${NODE_ENV:-production}
+      JWT_SECRET: ${JWT_SECRET:-changeme_generate_a_long_random_secret}
+      JWT_ACCESS_EXPIRES_IN: ${JWT_ACCESS_EXPIRES_IN:-15m}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-changeme_generate_a_different_long_random_secret}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-7d}
+      CORS_ORIGIN: ${CORS_ORIGIN:-}
+      LIBRARY_PATH: ${LIBRARY_PATH:-/data/library}
+      DOWNLOAD_TMP_PATH: ${DOWNLOAD_TMP_PATH:-/data/tmp}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme_use_a_strong_password}
     volumes:
       - library_data:/data/library
       - backend_tmp:/data/tmp
@@ -47,6 +65,8 @@ services:
   frontend:
     image: ghcr.io/samedev/music-hub-frontend:${MUSICHUB_VERSION:-latest}
     restart: unless-stopped
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-}
     depends_on:
       - backend
 

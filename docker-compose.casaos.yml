@@ -1,23 +1,26 @@
 # CasaOS/ZimaOS one-click import variant of docker-compose.release.yml.
 #
-# Two things CasaOS's compose importer can't handle, that the regular
-# release file relies on:
+# CasaOS's compose importer is not a full YAML/compose implementation —
+# it has broken on every one of these in turn:
 #
-# 1. Shell-style ${VAR:-default} substitution — CasaOS copies the literal
-#    string (including "${" and "}") into the container's environment,
-#    breaking Postgres auth, JWT secrets, and port mapping. Every value
-#    below is a plain literal instead, so CasaOS pre-fills its install
-#    screen with a working default and you edit whichever ones you want
-#    (password, library path, port) directly in that UI before deploying.
+# 1. Shell-style ${VAR:-default} substitution — copies the literal string
+#    (including "${" and "}") into the container's environment, breaking
+#    Postgres auth, JWT secrets, and port mapping. Every value below is a
+#    plain literal instead, so CasaOS pre-fills its install screen with a
+#    working default and you edit whichever ones you want (password,
+#    library path, port) directly in that UI before deploying.
 # 2. Docker-managed named volumes (top-level `volumes:` with no host path)
 #    — CasaOS always renders these as bind mounts and needs an explicit
 #    host directory, otherwise it fails with `field Source must not be
 #    empty`. Every volume below is a literal host path under
 #    /DATA/AppData/musichub/ instead.
-#
-# `depends_on` also uses the plain list form (not `condition: service_healthy`)
-# — CasaOS's parser doesn't understand the extended form and silently drops
-# every service after the one that trips on it.
+# 3. `depends_on` with the extended `condition: service_healthy` form —
+#    CasaOS's parser doesn't understand it and silently drops every
+#    service after the one that trips on it. Plain list form only.
+# 4. Unquoted values containing multiple ":" (e.g. a postgres:// URL) —
+#    quote every environment value defensively. Optional/blank vars
+#    (CORS_ORIGIN, VITE_API_URL) are omitted entirely rather than set to
+#    an empty string, for the same reason.
 #
 # Using plain `docker compose`? Use docker-compose.release.yml instead — it
 # supports .env overrides via ${VAR:-default} and proper health-gated startup.
@@ -26,9 +29,9 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: musichub
-      POSTGRES_PASSWORD: musichub
-      POSTGRES_DB: musichub
+      POSTGRES_USER: "musichub"
+      POSTGRES_PASSWORD: "musichub"
+      POSTGRES_DB: "musichub"
     volumes:
       - /DATA/AppData/musichub/postgres:/var/lib/postgresql/data
     healthcheck:
@@ -55,20 +58,19 @@ services:
       - postgres
       - redis
     environment:
-      DATABASE_URL: postgresql://musichub:musichub@postgres:5432/musichub
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      PORT: 3000
-      NODE_ENV: production
-      JWT_SECRET: changeme_generate_a_long_random_secret
-      JWT_ACCESS_EXPIRES_IN: 15m
-      JWT_REFRESH_SECRET: changeme_generate_a_different_long_random_secret
-      JWT_REFRESH_EXPIRES_IN: 7d
-      CORS_ORIGIN: ""
-      LIBRARY_PATH: /data/library
-      DOWNLOAD_TMP_PATH: /data/tmp
-      ADMIN_EMAIL: admin@example.com
-      ADMIN_PASSWORD: changeme_use_a_strong_password
+      DATABASE_URL: "postgresql://musichub:musichub@postgres:5432/musichub"
+      REDIS_HOST: "redis"
+      REDIS_PORT: "6379"
+      PORT: "3000"
+      NODE_ENV: "production"
+      JWT_SECRET: "changeme_generate_a_long_random_secret"
+      JWT_ACCESS_EXPIRES_IN: "15m"
+      JWT_REFRESH_SECRET: "changeme_generate_a_different_long_random_secret"
+      JWT_REFRESH_EXPIRES_IN: "7d"
+      LIBRARY_PATH: "/data/library"
+      DOWNLOAD_TMP_PATH: "/data/tmp"
+      ADMIN_EMAIL: "admin@example.com"
+      ADMIN_PASSWORD: "changeme_use_a_strong_password"
     volumes:
       - /DATA/Media/Music:/data/library
       - /DATA/AppData/musichub/backend-tmp:/data/tmp
@@ -77,8 +79,6 @@ services:
   frontend:
     image: ghcr.io/samedev/music-hub-frontend:latest
     restart: unless-stopped
-    environment:
-      VITE_API_URL: ""
     depends_on:
       - backend
 

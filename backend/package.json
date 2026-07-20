@@ -1,8 +1,8 @@
 {
-  "name": "@music-hub/backend",
+  "name": "@lunare/backend",
   "version": "0.1.3",
   "private": true,
-  "description": "MusicHub NestJS API",
+  "description": "Lunare NestJS API",
   "license": "MIT",
   "scripts": {
     "build": "nest build",

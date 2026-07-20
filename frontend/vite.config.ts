@@ -7,10 +7,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'logo.svg'],
       manifest: {
-        name: 'MusicHub',
-        short_name: 'MusicHub',
+        name: 'Lunare',
+        short_name: 'Lunare',
         description: 'Self-hosted personal music library manager',
         start_url: '/',
         lang: 'pt-BR',

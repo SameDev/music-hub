@@ -1,5 +1,5 @@
-const ACCESS_TOKEN_KEY = 'musichub.accessToken';
-const REFRESH_TOKEN_KEY = 'musichub.refreshToken';
+const ACCESS_TOKEN_KEY = 'lunare.accessToken';
+const REFRESH_TOKEN_KEY = 'lunare.refreshToken';
 
 export const authStorage = {
   getAccessToken: (): string | null => localStorage.getItem(ACCESS_TOKEN_KEY),

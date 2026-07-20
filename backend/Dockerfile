@@ -16,7 +16,7 @@ ENV NODE_ENV=production
 ENV CHECKPOINT_DISABLE=1
 RUN apk add --no-cache ffmpeg python3 py3-pip su-exec
 RUN pip install --no-cache-dir --break-system-packages yt-dlp
-RUN addgroup -S musichub && adduser -S musichub -G musichub
+RUN addgroup -S lunare && adduser -S lunare -G lunare
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist

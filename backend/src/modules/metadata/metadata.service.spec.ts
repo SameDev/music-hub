@@ -14,7 +14,7 @@ describe('MetadataService path safety', () => {
   let outsideFile: string;
 
   beforeAll(async () => {
-    const base = await mkdtemp(join(tmpdir(), 'musichub-test-'));
+    const base = await mkdtemp(join(tmpdir(), 'lunare-test-'));
     libraryRoot = join(base, 'library');
     const outsideDir = join(base, 'outside');
     await mkdir(libraryRoot, { recursive: true });

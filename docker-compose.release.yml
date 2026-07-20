@@ -12,13 +12,13 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-musichub}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-musichub}
-      POSTGRES_DB: ${POSTGRES_DB:-musichub}
+      POSTGRES_USER: ${POSTGRES_USER:-lunare}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lunare}
+      POSTGRES_DB: ${POSTGRES_DB:-lunare}
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-musichub}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lunare}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -35,7 +35,7 @@ services:
       retries: 5
 
   backend:
-    image: ghcr.io/samedev/music-hub-backend:${MUSICHUB_VERSION:-latest}
+    image: ghcr.io/samedev/lunare-backend:${LUNARE_VERSION:-latest}
     restart: unless-stopped
     depends_on:
       postgres:
@@ -43,7 +43,7 @@ services:
       redis:
         condition: service_healthy
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql://musichub:musichub@postgres:5432/musichub}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://lunare:lunare@postgres:5432/lunare}
       REDIS_HOST: ${REDIS_HOST:-redis}
       REDIS_PORT: ${REDIS_PORT:-6379}
       PORT: ${PORT:-3000}
@@ -58,12 +58,12 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme_use_a_strong_password}
     volumes:
-      - ${MUSICHUB_LIBRARY_PATH:-/DATA/Media/Music}:/data/library
+      - ${LUNARE_LIBRARY_PATH:-/DATA/Media/Music}:/data/library
       - backend_tmp:/data/tmp
       - backend_logs:/app/logs
 
   frontend:
-    image: ghcr.io/samedev/music-hub-frontend:${MUSICHUB_VERSION:-latest}
+    image: ghcr.io/samedev/lunare-frontend:${LUNARE_VERSION:-latest}
     restart: unless-stopped
     environment:
       VITE_API_URL: ${VITE_API_URL:-}
@@ -71,11 +71,11 @@ services:
       - backend
 
   nginx:
-    image: ghcr.io/samedev/music-hub-nginx:${MUSICHUB_VERSION:-latest}
+    image: ghcr.io/samedev/lunare-nginx:${LUNARE_VERSION:-latest}
     restart: unless-stopped
     ports:
       - target: 80
-        published: ${MUSICHUB_PORT:-8095}
+        published: ${LUNARE_PORT:-8095}
         protocol: tcp
     depends_on:
       - frontend

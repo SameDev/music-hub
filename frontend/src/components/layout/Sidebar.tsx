@@ -37,7 +37,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         }`}
       >
         <div className="flex items-center justify-between px-5 py-5">
-          <span className="text-lg font-semibold tracking-tight">MusicHub</span>
+          <span className="flex items-center gap-2">
+            <img src="/logo.svg" alt="" className="h-6 w-6" />
+            <span className="text-lg font-semibold tracking-tight">Lunare</span>
+          </span>
           <button
             type="button"
             onClick={onClose}

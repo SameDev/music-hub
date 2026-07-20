@@ -4,7 +4,7 @@ Guidance for AI coding agents working in this repository.
 
 ## What this is
 
-MusicHub — self-hosted music library server for homelabs. NestJS backend + React SPA frontend, npm workspaces monorepo. Downloading tracks (yt-dlp) is auxiliary; the core product is library organization, streaming, tagging, playlists. No features that circumvent copy protection or facilitate copyright infringement — this is a hard project boundary, not a style preference.
+Lunare — self-hosted music library server for homelabs. NestJS backend + React SPA frontend, npm workspaces monorepo. Downloading tracks (yt-dlp) is auxiliary; the core product is library organization, streaming, tagging, playlists. No features that circumvent copy protection or facilitate copyright infringement — this is a hard project boundary, not a style preference.
 
 ## Commands
 
@@ -35,7 +35,7 @@ npm run lint
 
 Minimum before opening a PR: `cd backend && npm test && npm run lint` and `cd frontend && npm run build && npm run lint`. For UI changes, actually click through in a browser — build/lint only prove it compiles.
 
-Local dev without Docker needs a local Postgres + Redis (see `.env.example`). Docker: `docker compose up -d` (build from source) or `docker-compose.release.yml` (prebuilt `ghcr.io/samedev/music-hub-{backend,frontend,nginx}` images, no clone needed).
+Local dev without Docker needs a local Postgres + Redis (see `.env.example`). Docker: `docker compose up -d` (build from source) or `docker-compose.release.yml` (prebuilt `ghcr.io/samedev/lunare-{backend,frontend,nginx}` images, no clone needed).
 
 ## Architecture
 

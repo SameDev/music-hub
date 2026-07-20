@@ -13,7 +13,7 @@
 #    — CasaOS always renders these as bind mounts and needs an explicit
 #    host directory, otherwise it fails with `field Source must not be
 #    empty`. Every volume below is a literal host path under
-#    /DATA/AppData/musichub/ instead.
+#    /DATA/AppData/lunare/ instead.
 # 3. `depends_on` with the extended `condition: service_healthy` form —
 #    CasaOS's parser doesn't understand it and silently drops every
 #    service after the one that trips on it. Plain list form only.
@@ -29,13 +29,13 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: "musichub"
-      POSTGRES_PASSWORD: "musichub"
-      POSTGRES_DB: "musichub"
+      POSTGRES_USER: "lunare"
+      POSTGRES_PASSWORD: "lunare"
+      POSTGRES_DB: "lunare"
     volumes:
-      - /DATA/AppData/musichub/postgres:/var/lib/postgresql/data
+      - /DATA/AppData/lunare/postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U musichub"]
+      test: ["CMD-SHELL", "pg_isready -U lunare"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -44,7 +44,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     volumes:
-      - /DATA/AppData/musichub/redis:/data
+      - /DATA/AppData/lunare/redis:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -52,13 +52,13 @@ services:
       retries: 5
 
   backend:
-    image: ghcr.io/samedev/music-hub-backend:latest
+    image: ghcr.io/samedev/lunare-backend:latest
     restart: unless-stopped
     depends_on:
       - postgres
       - redis
     environment:
-      DATABASE_URL: "postgresql://musichub:musichub@postgres:5432/musichub"
+      DATABASE_URL: "postgresql://lunare:lunare@postgres:5432/lunare"
       REDIS_HOST: "redis"
       REDIS_PORT: "6379"
       PORT: "3000"
@@ -73,17 +73,17 @@ services:
       ADMIN_PASSWORD: "changeme_use_a_strong_password"
     volumes:
       - /DATA/Media/Music:/data/library
-      - /DATA/AppData/musichub/backend-tmp:/data/tmp
-      - /DATA/AppData/musichub/backend-logs:/app/logs
+      - /DATA/AppData/lunare/backend-tmp:/data/tmp
+      - /DATA/AppData/lunare/backend-logs:/app/logs
 
   frontend:
-    image: ghcr.io/samedev/music-hub-frontend:latest
+    image: ghcr.io/samedev/lunare-frontend:latest
     restart: unless-stopped
     depends_on:
       - backend
 
   nginx:
-    image: ghcr.io/samedev/music-hub-nginx:latest
+    image: ghcr.io/samedev/lunare-nginx:latest
     restart: unless-stopped
     ports:
       - target: 80
@@ -94,7 +94,7 @@ services:
       - backend
 
 x-casaos:
-  id: com.github.samedev.musichub
+  id: com.github.samedev.lunare
   architectures:
     - amd64
     - arm64
@@ -102,10 +102,10 @@ x-casaos:
   author: SameDev
   category: Media
   developer: SameDev
-  icon: https://raw.githubusercontent.com/SameDev/music-hub/main/frontend/public/pwa-512x512.png
+  icon: https://raw.githubusercontent.com/SameDev/lunare/main/frontend/public/pwa-512x512.png
   title:
-    en_US: MusicHub
-    pt_BR: MusicHub
+    en_US: Lunare
+    pt_BR: Lunare
   tagline:
     en_US: Self-hosted music library server for homelabs
     pt_BR: Servidor de biblioteca de música self-hosted para homelabs

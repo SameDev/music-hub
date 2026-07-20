@@ -24,7 +24,7 @@ async function bootstrap(): Promise<void> {
   );
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('MusicHub API')
+    .setTitle('Lunare API')
     .setDescription('Personal media library manager API')
     .setVersion('0.1.0')
     .addBearerAuth()

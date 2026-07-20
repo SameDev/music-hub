@@ -1,13 +1,13 @@
-# Contributing to MusicHub
+# Contributing to Lunare
 
-Thanks for considering a contribution. MusicHub is a self-hosted personal media library manager built for homelabs — small in scope by design, so please read the [legal & ethical notice](./README.md) in the README before proposing any feature: nothing that circumvents copy protection or facilitates copyright infringement will be accepted, ever.
+Thanks for considering a contribution. Lunare is a self-hosted personal media library manager built for homelabs — small in scope by design, so please read the [legal & ethical notice](./README.md) in the README before proposing any feature: nothing that circumvents copy protection or facilitates copyright infringement will be accepted, ever.
 
 ## Ways to contribute
 
 - **Bug reports** — open an issue. Include your deployment method (Docker vs. bare `npm run dev`), steps to reproduce, and relevant logs.
 - **Bug fixes / small improvements** — a PR is fine without prior discussion.
 - **New features** — open an issue first to discuss scope and approach before writing code. This project intentionally stays lean; not every idea fits.
-- **Translations** — MusicHub ships `pt-BR` (default) and `en`. Adding a language means a new file under `frontend/src/i18n/` with the same key structure as the existing two, plus registering it in `frontend/src/i18n/index.ts` and the language `<select>` in Settings.
+- **Translations** — Lunare ships `pt-BR` (default) and `en`. Adding a language means a new file under `frontend/src/i18n/` with the same key structure as the existing two, plus registering it in `frontend/src/i18n/index.ts` and the language `<select>` in Settings.
 - **Docs** — README/CONTRIBUTING/`docs/design/` fixes are always welcome.
 
 ## Reporting a security vulnerability
@@ -19,8 +19,8 @@ Do **not** open a public issue for a security vulnerability. Use GitHub's privat
 Requires Node 20+, Docker (optional but recommended), and a local PostgreSQL + Redis if you skip Docker.
 
 ```bash
-git clone https://github.com/SameDev/music-hub.git
-cd music-hub
+git clone https://github.com/SameDev/lunare.git
+cd lunare
 cp .env.example .env
 npm install
 npm run dev   # backend on :3000, frontend on :5173, concurrently
@@ -33,7 +33,7 @@ Seeded admin credentials come from `ADMIN_EMAIL`/`ADMIN_PASSWORD` in `.env`.
 ## Project structure
 
 ```
-music-hub/
+lunare/
 ├── backend/   # NestJS API — Clean Architecture, one folder per module
 ├── frontend/  # React SPA — routes/components/contexts/lib
 ├── docker/    # Nginx reverse proxy config

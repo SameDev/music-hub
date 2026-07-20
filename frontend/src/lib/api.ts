@@ -4,7 +4,7 @@ import { getApiUrl } from './apiUrl';
 const API_URL = getApiUrl();
 const HTTP_NO_CONTENT = 204;
 
-export const AUTH_LOGOUT_EVENT = 'musichub:auth-logout';
+export const AUTH_LOGOUT_EVENT = 'lunare:auth-logout';
 
 let refreshPromise: Promise<boolean> | null = null;
 

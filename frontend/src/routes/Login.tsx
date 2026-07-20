@@ -32,7 +32,10 @@ export function LoginPage() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm rounded-lg border border-surface-border bg-surface-raised p-8"
       >
-        <h1 className="mb-1 text-xl font-semibold text-slate-100">MusicHub</h1>
+        <div className="mb-1 flex items-center gap-2">
+          <img src="/logo.svg" alt="" className="h-7 w-7" />
+          <h1 className="text-xl font-semibold text-slate-100">Lunare</h1>
+        </div>
         <p className="mb-6 text-sm text-slate-400">{t('auth.loginSubtitle')}</p>
 
         <label className="mb-1 block text-sm text-slate-400" htmlFor="email">

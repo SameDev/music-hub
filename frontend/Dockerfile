@@ -12,9 +12,9 @@ RUN npm run build
 FROM node:20-alpine3.19 AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
-RUN addgroup -S musichub && adduser -S musichub -G musichub
+RUN addgroup -S lunare && adduser -S lunare -G lunare
 RUN npm install -g serve
 COPY --from=build /app/dist ./dist
-USER musichub
+USER lunare
 EXPOSE 4173
 CMD ["serve", "-s", "dist", "-l", "4173"]

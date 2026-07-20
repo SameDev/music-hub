@@ -74,7 +74,9 @@ services:
     image: ghcr.io/samedev/music-hub-nginx:${MUSICHUB_VERSION:-latest}
     restart: unless-stopped
     ports:
-      - "${MUSICHUB_PORT:-8095}:80"
+      - target: 80
+        published: ${MUSICHUB_PORT:-8095}
+        protocol: tcp
     depends_on:
       - frontend
       - backend

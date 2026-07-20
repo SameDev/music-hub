@@ -94,6 +94,16 @@ src/i18n/                # pt-BR.json / en.json — keep both in sync
 ## Commits & pull requests
 
 - Keep commits focused — one logical change per commit, with a message that explains *why*, not just *what*.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope>): <summary>`. Scope is optional — omit it for changes spanning both `backend`/`frontend`, use it (`backend`, `frontend`, `docker`, `ci`, ...) for changes scoped to one area.
+  - `feat` — new user-facing capability
+  - `fix` — bug fix
+  - `docs` — README/CONTRIBUTING/AGENTS.md/docs-only changes
+  - `refactor` — code change that doesn't alter behavior
+  - `test` — adding or fixing tests only
+  - `chore` — deps, tooling, config, CI, version bumps
+  - `perf` — performance improvement
+  - Summary in imperative mood ("add", not "added"/"adds"), no trailing period.
+  - Breaking change: `!` after the type/scope (`feat(backend)!: ...`) plus a `BREAKING CHANGE:` footer explaining what breaks and how to migrate.
 - Reference the issue you're fixing/discussed, if any.
 - Open the PR against `main`, describe what changed and how you verified it (tests run, manual testing done).
 - Be ready for review feedback — this is a small project maintained in spare time, so response times vary, but every PR gets looked at.

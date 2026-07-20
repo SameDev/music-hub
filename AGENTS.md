@@ -97,3 +97,17 @@ Data fetching goes through TanStack Query. Player state lives in `PlayerContext`
 - No comments explaining *what* — name things clearly. Comment only a non-obvious *why*.
 - No speculative abstractions — solve the call site in front of you, not a hypothetical future one.
 - New features: open an issue to discuss scope/approach before writing code — this project stays intentionally lean. Bug fixes don't need that.
+
+## Commits
+
+Conventional Commits: `<type>(<scope>): <summary>`. Scope is optional — omit it for changes spanning both `backend`/`frontend`, use it (`backend`, `frontend`, `docker`, `ci`, ...) when a change is scoped to one area.
+
+- `feat` — new user-facing capability
+- `fix` — bug fix
+- `docs` — README/CONTRIBUTING/AGENTS.md/docs-only changes
+- `refactor` — code change that doesn't alter behavior
+- `test` — adding or fixing tests only
+- `chore` — deps, tooling, config, CI, version bumps
+- `perf` — performance improvement
+
+One logical change per commit. Summary in imperative mood ("add", not "added"/"adds"), no trailing period. Breaking changes: `!` after the type/scope (`feat(backend)!: ...`) plus a `BREAKING CHANGE:` footer explaining what breaks and how to migrate.

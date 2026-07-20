@@ -115,6 +115,7 @@ jobs:
         with:
           files: |
             docker-compose.release.yml
+            docker-compose.casaos.yml
             .env.example
           generate_release_notes: true
           body: |
@@ -134,6 +135,11 @@ jobs:
             Want your own secrets? Download `.env.example`, save it as `.env` next to
             the compose file, and edit only the values you want to override — anything
             you don't set falls back to the built-in default automatically.
+
+            **CasaOS / ZimaOS one-click import**: use `docker-compose.casaos.yml` instead.
+            CasaOS's importer doesn't resolve `${VAR:-default}` shell substitution, so that
+            file has every default written as a plain literal value that CasaOS can show
+            and let you edit directly in its install screen.
 
             Images published to `ghcr.io/${{ github.repository_owner }}/music-hub-{backend,frontend,nginx}`,
             built for `linux/amd64` and `linux/arm64`.

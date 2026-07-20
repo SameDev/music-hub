@@ -119,7 +119,7 @@ The frontend is a React SPA talking to a NestJS API over REST + WebSocket. The b
 
 ## 📦 Installation
 
-### Option 1 — Prebuilt images (recommended, incl. ZimaOS / NAS)
+### Option 1 — Prebuilt images (recommended)
 
 No clone, no build, no `.env` required. Grab a single file and run it — sane defaults are baked in:
 
@@ -128,9 +128,11 @@ curl -O https://raw.githubusercontent.com/SameDev/music-hub/main/docker-compose.
 docker compose -f docker-compose.release.yml up -d
 ```
 
-That's it — MusicHub is available at `http://localhost:8095`. This is the same file used for one-click deployment on ZimaOS and similar NAS app stores.
+That's it — MusicHub is available at `http://localhost:8095`.
 
 Everything runs on default credentials out of the box, which is fine for a trusted home network. If you want your own secrets (recommended for anything reachable beyond localhost/Tailscale), create a `.env` next to the compose file — see [Configuration](#-configuration) for the variables it understands; any you don't set fall back to defaults automatically.
+
+**CasaOS / ZimaOS / NAS one-click import**: use [`docker-compose.casaos.yml`](./docker-compose.casaos.yml) instead of `docker-compose.release.yml`. CasaOS's compose importer doesn't resolve `${VAR:-default}` shell substitution — it inserts the literal string, which breaks Postgres auth and the port mapping. `docker-compose.casaos.yml` has every default written as a plain value instead, so CasaOS's install screen prefills correctly and you edit whichever fields you want (password, library path, port) right there.
 
 Images are published to `ghcr.io/samedev/music-hub-{backend,frontend,nginx}` for `linux/amd64` and `linux/arm64` on every tagged release. Pin a version with `MUSICHUB_VERSION=v0.1.0` in `.env`, or leave it unset to track `latest`.
 

@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
-npx prisma migrate deploy
+mkdir -p "${LIBRARY_PATH:-/data/library}" "${DOWNLOAD_TMP_PATH:-/data/tmp}" /app/logs
+chown musichub:musichub "${LIBRARY_PATH:-/data/library}" "${DOWNLOAD_TMP_PATH:-/data/tmp}" /app/logs
 
-exec node dist/main.js
+su-exec musichub npx prisma migrate deploy
+
+exec su-exec musichub node dist/main.js

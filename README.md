@@ -128,7 +128,7 @@ curl -O https://raw.githubusercontent.com/SameDev/music-hub/main/docker-compose.
 docker compose -f docker-compose.release.yml up -d
 ```
 
-That's it — MusicHub is available at `http://localhost`. This is the same file used for one-click deployment on ZimaOS and similar NAS app stores.
+That's it — MusicHub is available at `http://localhost:8095`. This is the same file used for one-click deployment on ZimaOS and similar NAS app stores.
 
 Everything runs on default credentials out of the box, which is fine for a trusted home network. If you want your own secrets (recommended for anything reachable beyond localhost/Tailscale), create a `.env` next to the compose file — see [Configuration](#-configuration) for the variables it understands; any you don't set fall back to defaults automatically.
 
@@ -164,7 +164,9 @@ Every variable below has a working default — you only need a `.env` file (copy
 | `REDIS_HOST` / `REDIS_PORT` | Redis connection, used by BullMQ and the queue system | `redis` / `6379` |
 | `JWT_SECRET` / `JWT_REFRESH_SECRET` | Signing secrets — generate your own for anything beyond a trusted network | example values |
 | `CORS_ORIGIN` | Extra allowed origins beyond localhost + Tailscale CGNAT (comma-separated) | *(none)* |
-| `LIBRARY_PATH` / `DOWNLOAD_TMP_PATH` | Where your library and in-progress downloads live on disk (mirrors Settings, which can override these live) | `/data/library` / `/data/tmp` |
+| `LIBRARY_PATH` / `DOWNLOAD_TMP_PATH` | Where your library and in-progress downloads live *inside the container* (mirrors Settings, which can override these live) | `/data/library` / `/data/tmp` |
+| `MUSICHUB_LIBRARY_PATH` | Host folder bind-mounted to `/data/library` — point this at your existing music collection | `/DATA/Media/Music` |
+| `MUSICHUB_PORT` | Host port nginx binds to | `8095` |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Seeded on first boot — change the password after first login | `admin@example.com` / example value |
 | `VITE_API_URL` | Only needed for advanced/non-default deployments | *(blank)* |
 

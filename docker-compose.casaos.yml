@@ -1,15 +1,26 @@
 # CasaOS/ZimaOS one-click import variant of docker-compose.release.yml.
 #
-# CasaOS's compose importer does not resolve shell-style ${VAR:-default}
-# substitution — it copies the literal string (including the "${" and "}")
-# into the container's environment, which breaks Postgres auth, JWT secrets,
-# and port mapping. Every value below is a plain literal instead, so CasaOS
-# pre-fills its install-screen fields with a working default and you edit
-# whichever ones you want (password, library path, port) directly in that
-# UI before deploying.
+# Two things CasaOS's compose importer can't handle, that the regular
+# release file relies on:
+#
+# 1. Shell-style ${VAR:-default} substitution — CasaOS copies the literal
+#    string (including "${" and "}") into the container's environment,
+#    breaking Postgres auth, JWT secrets, and port mapping. Every value
+#    below is a plain literal instead, so CasaOS pre-fills its install
+#    screen with a working default and you edit whichever ones you want
+#    (password, library path, port) directly in that UI before deploying.
+# 2. Docker-managed named volumes (top-level `volumes:` with no host path)
+#    — CasaOS always renders these as bind mounts and needs an explicit
+#    host directory, otherwise it fails with `field Source must not be
+#    empty`. Every volume below is a literal host path under
+#    /DATA/AppData/musichub/ instead.
+#
+# `depends_on` also uses the plain list form (not `condition: service_healthy`)
+# — CasaOS's parser doesn't understand the extended form and silently drops
+# every service after the one that trips on it.
 #
 # Using plain `docker compose`? Use docker-compose.release.yml instead — it
-# supports .env overrides via ${VAR:-default}.
+# supports .env overrides via ${VAR:-default} and proper health-gated startup.
 services:
   postgres:
     image: postgres:16-alpine
@@ -19,7 +30,7 @@ services:
       POSTGRES_PASSWORD: musichub
       POSTGRES_DB: musichub
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - /DATA/AppData/musichub/postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U musichub"]
       interval: 10s
@@ -30,7 +41,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     volumes:
-      - redis_data:/data
+      - /DATA/AppData/musichub/redis:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -41,10 +52,8 @@ services:
     image: ghcr.io/samedev/music-hub-backend:latest
     restart: unless-stopped
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - postgres
+      - redis
     environment:
       DATABASE_URL: postgresql://musichub:musichub@postgres:5432/musichub
       REDIS_HOST: redis
@@ -62,8 +71,8 @@ services:
       ADMIN_PASSWORD: changeme_use_a_strong_password
     volumes:
       - /DATA/Media/Music:/data/library
-      - backend_tmp:/data/tmp
-      - backend_logs:/app/logs
+      - /DATA/AppData/musichub/backend-tmp:/data/tmp
+      - /DATA/AppData/musichub/backend-logs:/app/logs
 
   frontend:
     image: ghcr.io/samedev/music-hub-frontend:latest
@@ -83,9 +92,3 @@ services:
     depends_on:
       - frontend
       - backend
-
-volumes:
-  pg_data:
-  redis_data:
-  backend_tmp:
-  backend_logs:
